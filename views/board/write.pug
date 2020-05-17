@@ -1,8 +1,8 @@
 extends ../layout/default.pug
 block content
 	.jumbotron
-		h1 게시글 보기
-			small (list)
+		h1 게시글 작성
+			small (write)
 	.container
 		form(action="/board/save" name="wrForm" method="post" onsubmit="return onSubmit(this);")
 			ul.wr-lists

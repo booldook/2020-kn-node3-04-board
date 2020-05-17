@@ -1,3 +1,15 @@
 extends ../layout/default.pug
 block content
-	h1 LIST
+	.jumbotron
+		h1 게시글 리스트 보기
+			small (list)
+	.container
+		table.table.table-bordered.table-hover
+			thead.bg-dark.text-light
+				tr
+					th 번호
+					th 제목
+					th 작성자
+					th 작성일
+					th 조회수
+			tbody
