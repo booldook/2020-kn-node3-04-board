@@ -49,4 +49,10 @@ router.post('/save', async (req, res, next) => {
 	}
 })
 
+router.get('/view/:id', (req, res, next) => {
+	let id = req.params.id;
+	let pugVals = {cssFile: "board", jsFile: "board"};
+	res.render('board/view.pug', pugVals);
+})
+
 module.exports = router;

@@ -16,7 +16,7 @@ block content
 				each list in lists
 					tr
 						td= list.id
-						td.text-left= list.title
+						td.board-link.text-left(data-id=`${list.id}`)= list.title
 						td= list.writer
 						td= list.created
 						td= list.readnum

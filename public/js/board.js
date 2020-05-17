@@ -16,3 +16,9 @@ function onSubmit(f) {
 	}
 	return true;
 }
+
+document.querySelectorAll(".board-link").forEach(function(v) {
+	v.addEventListener("click", function(){
+		location.href = "/board/view/" + this.dataset.id;
+	});
+});

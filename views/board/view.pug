@@ -1,0 +1,22 @@
+extends ../layout/default.pug
+block content
+	.jumbotron
+		h1 게시글 내용 보기
+			small (view)
+	.container
+		h3.title.py-2.border-bottom 홍길동전 입니다
+		.view-info.d-flex.justify-content-between.py-3
+			.writer
+				span.title 작성자:
+				span.content 홍길동
+			.created
+				span.title 작성일:
+				span.content 2020-05-17
+			.readnum
+				span.title 조회수:
+				span.content 0
+		.comment.border.rounded.p-3 아버지를 아버지라...
+		.text-center.py-3
+			button.btn.btn-primary 리스트
+			button.btn.btn-danger 삭제
+			button.btn.btn-success 수정

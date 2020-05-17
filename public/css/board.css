@@ -1,6 +1,5 @@
 ul {list-style: none; margin: 0; padding: 0;}
 .wr-lists {padding: 16px; border: 1px solid #ccc; border-radius: 6px;}
-.wr-lists .wr-list {}
 .wr-lists .title {flex: 0 0 20%; border-bottom: 1px solid #ccc;}
 .wr-lists .content {flex: 0 0 80%;}
 .wr-lists textarea {min-height: 150px;}
@@ -9,3 +8,6 @@ ul {list-style: none; margin: 0; padding: 0;}
 .list-tb th:nth-child(3) {width: 15%;}
 .list-tb th:nth-child(4) {width: 15%;}
 .list-tb th:nth-child(5) {width: 10%;}
+
+.view-info .title {font-weight: bold; margin-right: 12px;}
+.view-info .content {font-size: 18px;}
