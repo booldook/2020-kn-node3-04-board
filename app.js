@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const createError = require('http-errors');
 require('dotenv').config();
 
 /* Server */
@@ -21,3 +22,15 @@ app.use('/', express.static(path.join(__dirname, './public')));
 /* Router */
 const boardRouter = require('./routes/board');
 app.use('/board', boardRouter);
+
+
+/* 예외처리 */
+app.use((req, res, next) => {
+	next(createError(404));
+})
+
+app.use((err, req, res, next) => {
+	res.locals.message = err.message;
+	res.locals.status = (err.status || 500) + " error";
+	res.render('error.pug');
+})
