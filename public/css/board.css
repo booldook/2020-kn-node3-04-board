@@ -1,0 +1,5 @@
+ul {list-style: none; margin: 0; padding: 0;}
+.wr-lists {padding: 16px; border: 1px solid #ccc; border-radius: 6px;}
+.wr-lists .wr-list {border-bottom: 1px solid #ccc;}
+.wr-lists .title {flex: 0 0 20%;}
+.wr-lists .content {flex: 0 0 80%;}

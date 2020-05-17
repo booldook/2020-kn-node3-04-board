@@ -1,3 +1,11 @@
 extends ../layout/default.pug
 block content
-	h1 WRITE
+	.jumbotron
+		h1 게시글 보기
+			small (list)
+	.container
+		ul.wr-lists
+			li.wr-list.d-flex.align-items-center
+				.title.p-3.bg-dark.text-light 제목
+				.content.p-1
+					input.form-control(type="text")
