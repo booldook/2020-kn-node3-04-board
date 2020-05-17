@@ -13,4 +13,8 @@ router.get('/write', (req, res, next) => {
 	res.render("board/write.pug", pugVals);
 })
 
+router.post('/save', (req, res, next) => {
+	
+})
+
 module.exports = router;

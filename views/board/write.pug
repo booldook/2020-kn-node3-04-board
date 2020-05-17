@@ -4,7 +4,7 @@ block content
 		h1 게시글 보기
 			small (list)
 	.container
-		form(name="wrForm" method="post" onsubmit="return onSumbit(this);")
+		form(action="/board/save" name="wrForm" method="post" onsubmit="return onSubmit(this);")
 			ul.wr-lists
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 제목
