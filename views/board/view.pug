@@ -4,19 +4,19 @@ block content
 		h1 게시글 내용 보기
 			small (view)
 	.container
-		h3.title.py-2.border-bottom 홍길동전 입니다
+		h3.title.py-2.border-bottom= `[${data.id}] ${data.title}`
 		.view-info.d-flex.justify-content-between.py-3
 			.writer
 				span.title 작성자:
-				span.content 홍길동
+				span.content= data.writer
 			.created
 				span.title 작성일:
-				span.content 2020-05-17
+				span.content= data.created
 			.readnum
 				span.title 조회수:
-				span.content 0
-		.comment.border.rounded.p-3 아버지를 아버지라...
+				span.content= data.readnum
+		.comment.border.rounded.p-3(style="min-height: 200px;")= data.comment
 		.text-center.py-3
-			button.btn.btn-primary 리스트
-			button.btn.btn-danger 삭제
-			button.btn.btn-success 수정
+			button.btn.btn-primary(onclick=`location.href = '/board';`) 리스트
+			button.btn.btn-danger(onclick=`confirm('정말로 삭제하시겠습니까?') ? location.href = '/board/remove/${data.id}' : null;`) 삭제
+			button.btn.btn-success(onclick=`location.href = '/board/update/${data.id}';`) 수정
