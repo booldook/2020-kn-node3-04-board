@@ -5,9 +5,25 @@ const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert } = require('../modules/util');
 
-router.get(['', '/list'], (req, res, next) => {
-	const pugVals = {cssFile: "board", jsFile: "board"};
-	res.render("board/list.pug", pugVals);
+router.get(['', '/list'], async (req, res, next) => {
+	let pugVals = {cssFile: "board", jsFile: "board"};
+	let sql = "SELECT * FROM board ORDER BY id DESC";
+	let connect, result;
+	try {
+		connect = await pool.getConnection();
+		result = await connect.query(sql);
+		connect.release();
+		let lists = result[0].map((v) => {
+			v.created = moment(v.created).format('YYYY-MM-DD');
+			return v ;
+		});
+		pugVals.lists = lists;
+		res.render("board/list.pug", pugVals);
+	}
+	catch (e) {
+		connect.release();
+		next(e);
+	}
 })
 
 router.get('/write', (req, res, next) => {

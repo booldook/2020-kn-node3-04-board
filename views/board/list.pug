@@ -4,7 +4,7 @@ block content
 		h1 게시글 리스트 보기
 			small (list)
 	.container
-		table.table.table-bordered.table-hover
+		table.list-tb.table.table-bordered.table-hover.text-center
 			thead.bg-dark.text-light
 				tr
 					th 번호
@@ -13,3 +13,10 @@ block content
 					th 작성일
 					th 조회수
 			tbody
+				each list in lists
+					tr
+						td= list.id
+						td.text-left= list.title
+						td= list.writer
+						td= list.created
+						td= list.readnum
