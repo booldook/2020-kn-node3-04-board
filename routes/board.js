@@ -8,6 +8,7 @@ const pager = require('../modules/pager');
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	let page = req.params.page ? Number(req.params.page) : 1;
+	req.app.locals.page = page;
 	let pugVals = {cssFile: "board", jsFile: "board"};
 	let connect, result, sql, total;
 	try {
@@ -71,7 +72,25 @@ router.post('/save', async (req, res, next) => {
 		connect.release();
 		next(e);
 	}
-})
+});
+
+router.post('/put', async (req, res, next) => {
+	let { title, writer, comment, id } = req.body;
+	let values = [title, writer, comment, id];
+	let sql = "UPDATE board SET title=?, writer=?, comment=? WHERE id=?";
+	let connect, result;
+	try {
+		connect = await pool.getConnection();
+		result = await connect.query(sql, values);
+		connect.release();
+		if(result[0].affectedRows > 0) res.send(alert('수정되었습니다', '/board/list/'+req.app.locals.page));
+		else res.send(alert('에러가 발생하였습니다.', '/board'));
+	}
+	catch(e) {
+		connect.release();
+		next(e);
+	}
+});
 
 router.get('/view/:id', async (req, res, next) => {
 	let id = req.params.id;
@@ -100,7 +119,7 @@ router.get('/remove/:id', async (req, res, next) => {
 		connect = await pool.getConnection();
 		result = await connect.query(sql, [id]);
 		connect.release();
-		if(result[0].affectedRows == 1) res.send(alert("삭제되었습니다.", "/board"));
+		if(result[0].affectedRows == 1) res.send(alert("삭제되었습니다.", "/board/list/"+req.app.locals.page));
 		else res.send(alert("삭제가 실행되지 않았습니다. 관리자에게 문의하세요.", "/board"));
 	}
 	catch(e) {

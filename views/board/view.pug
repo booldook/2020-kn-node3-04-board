@@ -17,6 +17,6 @@ block content
 				span.content= data.readnum
 		.comment.border.rounded.p-3(style="min-height: 200px;")= data.comment
 		.text-center.py-3
-			button.btn.btn-primary(onclick=`location.href = '/board';`) 리스트
+			button.btn.btn-primary(onclick=`location.href = '/board/list/${page}';`) 리스트
 			button.btn.btn-danger(onclick=`confirm('정말로 삭제하시겠습니까?') ? location.href = '/board/remove/${data.id}' : null;`) 삭제
 			button.btn.btn-success(onclick=`location.href = '/board/update/${data.id}';`) 수정
