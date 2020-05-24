@@ -4,14 +4,20 @@ const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert } = require('../modules/util');
+const pager = require('../modules/pager');
 
-router.get(['/', '/list'], async (req, res, next) => {
+router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
+	let page = req.params.page ? Number(req.params.page) : 1;
 	let pugVals = {cssFile: "board", jsFile: "board"};
-	let sql = "SELECT * FROM board ORDER BY id DESC";
-	let connect, result;
+	let connect, result, sql, total;
 	try {
 		connect = await pool.getConnection();
+		sql = "SELECT count(id) FROM board";
 		result = await connect.query(sql);
+		total = result[0][0]['count(id)'];
+		pagerValues = pager({page, total, list: 3, grp: 2});
+		sql = "SELECT * FROM board ORDER BY id DESC LIMIT ?, ?";
+		result = await connect.query(sql, [pagerValues.stIdx, pagerValues.list]);
 		connect.release();
 		let lists = result[0].map((v) => {
 			v.created = moment(v.created).format('YYYY-MM-DD');
