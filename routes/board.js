@@ -36,7 +36,24 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 router.get('/write', (req, res, next) => {
 	const pugVals = {cssFile: "board", jsFile: "board"};
 	res.render("board/write.pug", pugVals);
-})
+});
+
+router.get('/update/:id', async (req, res, next) => {
+	let pugVals = {cssFile: "board", jsFile: "board"};
+	let connect, sql, result;
+	sql = "SELECT * FROM board WHERE id="+req.params.id;
+	try {
+		connect = await pool.getConnection();
+		result = await connect.query(sql);
+		connect.release();
+		pugVals.list = result[0][0];
+		res.render("board/write.pug", pugVals);
+	}
+	catch (e) {
+		connect.release();
+		next(e);
+	}
+});
 
 router.post('/save', async (req, res, next) => {
 	let { title, writer, comment, created = moment().format('YYYY-MM-DD HH:mm:ss') } = req.body;

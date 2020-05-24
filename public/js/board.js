@@ -1,4 +1,5 @@
 function onSubmit(f) {
+	if(f.id) f.action = "/board/put";
 	if(f.title.value.trim() === "") {
 		alert("제목을 입력하세요");
 		f.title.focus();

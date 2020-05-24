@@ -1,23 +1,35 @@
 extends ../layout/default.pug
 block content
 	.jumbotron
-		h1 게시글 작성
-			small (write)
+		if list
+			h1 게시글 수정
+				small (update)
+		else
+			h1 게시글 작성
+				small (write)
 	.container
 		form(action="/board/save" name="wrForm" method="post" onsubmit="return onSubmit(this);")
+			if list
+				input(type="hidden" name="id" value=`${list.id}`)
 			ul.wr-lists
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 제목
 					.content.p-1
-						input.form-control(type="text" name="title" placeholder="제목을 작성해 주세요.")
+						input.form-control(type="text" name="title" placeholder="제목을 작성해 주세요." value=`${list ? list.title : ""}`)
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 작성자
 					.content.p-1
-						input.form-control(type="text" name="writer" placeholder="작성자를 작성해 주세요.")
+						input.form-control(type="text" name="writer" placeholder="작성자를 작성해 주세요." value=`${list ? list.title : ""}`)
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 내용
 					.content.p-1
-						textarea.form-control(name="comment" placeholder="내용을 작성해 주세요.")
+						if list
+							textarea.form-control(name="comment" placeholder="내용을 작성해 주세요.")= list.comment
+						else
+							textarea.form-control(name="comment" placeholder="내용을 작성해 주세요.")
 				li.text-center.p-3
-					button.btn.btn-primary 저장
+					if list
+						button.btn.btn-success 수정
+					else
+						button.btn.btn-primary 저장
 					button(type="reset").btn.btn-danger 다시작성
