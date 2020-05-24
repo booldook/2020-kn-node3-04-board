@@ -11,3 +11,17 @@ ul {list-style: none; margin: 0; padding: 0;}
 
 .view-info .title {font-weight: bold; margin-right: 12px;}
 .view-info .content {font-size: 18px;}
+
+.pager-wrap {margin-top: 40px;}
+.pager-wrap a {text-decoration: none; color: #222;}
+.pager-wrap a:link {text-decoration: none; color: #222;}
+.pager-wrap a:hover {text-decoration: none; color: #222;}
+.pager-wrap > div {width: 30px; height: 30px; border: 1px solid #ccc; text-align: center; line-height: 30px; margin-right: -1px; cursor:pointer;}
+.pager-wrap > .bt-page.active {background-color: #222;}
+.pager-wrap > .bt-page.active > a,
+.pager-wrap > .bt-page.active > a:link,
+.pager-wrap > .bt-page.active > a:hover {color: #fff;}
+.pager-wrap > .bt-first,
+.pager-wrap > .bt-prev,
+.pager-wrap > .bt-next,
+.pager-wrap > .bt-last {background-color: #eee;}

@@ -5,7 +5,7 @@ const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert } = require('../modules/util');
 
-router.get(['', '/list'], async (req, res, next) => {
+router.get(['/', '/list'], async (req, res, next) => {
 	let pugVals = {cssFile: "board", jsFile: "board"};
 	let sql = "SELECT * FROM board ORDER BY id DESC";
 	let connect, result;
