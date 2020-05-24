@@ -1,15 +1,28 @@
 .pager-wrap.d-flex.justify-content-center
 	.bt-first
-		a.fa.fa-angle-double-left(href=`#`)
+		if pager.first
+			a.fa.fa-angle-double-left(href=`/board/list/${pager.first}`)
+		else
+			a.fa.fa-angle-double-left.disabled
 	.bt-prev
-		a.fa.fa-angle-left(href=`#`)
-	.bt-page
-		a(href=`#`) 1
-	.bt-page.active
-		a(href=`#`) 2
-	.bt-page
-		a(href=`#`) 3
+		if pager.prev
+			a.fa.fa-angle-left(href=`/board/list/${pager.prev}`)
+		else
+			a.fa.fa-angle-left.disabled
+	- for(var i=pager.grpSt; i<=pager.grpEd; i++)
+		if i == pager.page
+			.bt-page.active
+				a(href=`/board/list/${i}`)= i
+		else
+			.bt-page
+				a(href=`/board/list/${i}`)= i
 	.bt-next
-		a.fa.fa-angle-right(href=`#`)
+		if pager.next
+			a.fa.fa-angle-right(href=`/board/list/${pager.next}`)
+		else
+			a.fa.fa-angle-right.disabled
 	.bt-last
-		a.fa.fa-angle-double-right(href=`#`)
+		if pager.last
+			a.fa.fa-angle-double-right(href=`/board/list/${pager.last}`)
+		else
+			a.fa.fa-angle-double-right.disabled

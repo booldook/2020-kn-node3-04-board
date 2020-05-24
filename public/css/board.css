@@ -25,3 +25,7 @@ ul {list-style: none; margin: 0; padding: 0;}
 .pager-wrap > .bt-prev,
 .pager-wrap > .bt-next,
 .pager-wrap > .bt-last {background-color: #eee;}
+.pager-wrap > .bt-first > a.disabled,
+.pager-wrap > .bt-prev > a.disabled,
+.pager-wrap > .bt-next > a.disabled,
+.pager-wrap > .bt-last > a.disabled {color: #999; cursor: default;}

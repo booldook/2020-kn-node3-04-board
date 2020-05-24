@@ -15,19 +15,17 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		sql = "SELECT count(id) FROM board";
 		result = await connect.query(sql);
 		total = result[0][0]['count(id)'];
-		pagerValues = pager({page, total, list: 3, grp: 3});
-		connect.release();
-		res.json(pagerValues);
-		/*
+		pagerVals = pager({page, total, list: 3, grp: 3});
+		pugVals.pager = pagerVals;
 		sql = "SELECT * FROM board ORDER BY id DESC LIMIT ?, ?";
-		result = await connect.query(sql, [pagerValues.stIdx, pagerValues.list]);
+		result = await connect.query(sql, [pagerVals.stIdx, pagerVals.list]);
+		connect.release();
 		let lists = result[0].map((v) => {
 			v.created = moment(v.created).format('YYYY-MM-DD');
 			return v ;
 		});
 		pugVals.lists = lists;
 		res.render("board/list.pug", pugVals);
-		*/
 	}
 	catch (e) {
 		connect.release();
