@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     cb(null, makeFile(file));
   }
 });
-const upload = multer({storage});
+const upload = multer({storage, fileFilter});
 
 function makeFile(file) {
 	let oriName = file.originalname;	// abc.jpg
@@ -30,6 +30,18 @@ function makeFolder() {
 		});
 	}
 	return newPath;
+}
+
+function fileFilter(req, file, cb) {
+	const allowExt = ['.jpg', '.jpeg', '.gif', '.png', '.pdf', '.zip'];
+	const ext = path.extname(file.originalname).toLowerCase();
+	if(allowExt.indexOf(ext) > -1) {
+		cb(null, true);
+	}
+	else {
+		req.fileChk = ext.substr(1);
+		cb(null, false);
+	}
 }
 
 module.exports = upload;
