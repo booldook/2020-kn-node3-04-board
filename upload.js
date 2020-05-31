@@ -3,8 +3,7 @@ const app = express();
 const path = require('path');
 const createError = require('http-errors');
 require('dotenv').config();
-const multer = require('multer');
-const upload = multer({dest: path.join(__dirname, 'upload')});
+const upload = require('./modules/multer-conn');
 
 /* Server */
 app.listen(process.env.PORT, () => {
@@ -23,7 +22,7 @@ app.use('/', express.static(path.join(__dirname, './public')));
 
 /* file Upload */
 app.post("/save", upload.single("upfile"), (req, res, next) => {
-	res.send("upload 완료");
+	res.send(	"업로드 완료"	);
 });
 app.get("/", (req, res, next) => {
 	res.render("test/upload.pug");
