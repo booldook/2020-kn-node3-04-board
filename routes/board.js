@@ -1,11 +1,19 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert, imgExt } = require('../modules/util');
 const upload = require('../modules/multer-conn');
 const pager = require('../modules/pager');
+
+const imgSrc = (file) => {
+	if(imgExt.indexOf(path.extname(file).toLowerCase()) > -1) {
+		return '/storage/' + file.substr(0, 6) + '/' + file; 
+	}
+	else return null;
+}
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	let page = req.params.page ? Number(req.params.page) : 1;
@@ -24,11 +32,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		connect.release();
 		let lists = result[0].map((v) => {
 			v.created = moment(v.created).format('YYYY-MM-DD');
-			if(v.savename) {
-				if(imgExt.indexOf(path.extname(v.savename)) > -1) {
-					v.src = '/storage/' + v.savename.substr(0, 6) + '/' + v.savename; 
-				}
-			}
+			if(v.savename) v.src = imgSrc(v.savename); 
 			return v ;
 		});
 		pugVals.lists = lists;
@@ -117,6 +121,8 @@ router.get('/view/:id', async (req, res, next) => {
 		connect.release();
 		pugVals.data = result[0][0];
 		pugVals.data.created = moment(pugVals.data.created).format('YYYY-MM-DD HH:mm:ss');
+		if(pugVals.data.savename) pugVals.data.src = imgSrc(pugVals.data.savename);
+		if(pugVals.data.savename) pugVals.data.file = pugVals.data.oriname; 
 		res.render('board/view.pug', pugVals);
 	}
 	catch (e) {
@@ -135,6 +141,23 @@ router.get('/remove/:id', async (req, res, next) => {
 		connect.release();
 		if(result[0].affectedRows == 1) res.send(alert("삭제되었습니다.", "/board/list/"+req.app.locals.page));
 		else res.send(alert("삭제가 실행되지 않았습니다. 관리자에게 문의하세요.", "/board"));
+	}
+	catch(e) {
+		connect.release();
+		next(e);
+	}
+});
+
+router.get('/download/:id', async (req, res, next) => {
+	const id = req.params.id;
+	const sql = "SELECT * FROM board WHERE id=" + id;
+	let connect, result;
+	try {
+		connect = await pool.getConnection();
+		result = await connect.query(sql);
+		connect.release();
+		let realfile = path.join(__dirname, '../upload/', result[0][0].savename.substr(0, 6), result[0][0].savename);
+		res.download(realfile, result[0][0].oriname);
 	}
 	catch(e) {
 		connect.release();

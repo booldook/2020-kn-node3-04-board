@@ -15,7 +15,15 @@ block content
 			.readnum
 				span.title 조회수:
 				span.content= data.readnum
-		.comment.border.rounded.p-3(style="min-height: 200px;")= data.comment
+		.comment.border.rounded.p-3(style="min-height: 200px;")
+			div= data.comment
+			if data.src
+				.py-3
+					img.view-img(src=`${data.src}`)
+		if data.file
+			.file.border.rounded.my-2.p-3
+				span 첨부파일 다운로드: 
+				a(href=`/board/download/${data.id}`)= data.file 
 		.text-center.py-3
 			button.btn.btn-primary(onclick=`location.href = '/board/list/${page}';`) 리스트
 			button.btn.btn-danger(onclick=`confirm('정말로 삭제하시겠습니까?') ? location.href = '/board/remove/${data.id}' : null;`) 삭제
