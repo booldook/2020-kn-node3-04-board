@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
 const multer = require('multer');
+const { allowExt } = require('./util');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, makeFolder());
@@ -10,7 +11,7 @@ const storage = multer.diskStorage({
     cb(null, makeFile(file));
   }
 });
-const upload = multer({storage, fileFilter});
+const upload = multer({storage, fileFilter, limits: {fileSize: 2048000}});
 
 function makeFile(file) {
 	let oriName = file.originalname;	// abc.jpg
@@ -25,7 +26,7 @@ function makeFolder() {
 	const newPath = path.join(__dirname, "../upload/"+folderName);
 	if(!fs.existsSync(newPath)) {
 		fs.mkdir(newPath, (err) => {
-			if(err) next(err);
+			if(err) new Error(err);
 			return newPath;
 		});
 	}
@@ -33,7 +34,6 @@ function makeFolder() {
 }
 
 function fileFilter(req, file, cb) {
-	const allowExt = ['.jpg', '.jpeg', '.gif', '.png', '.pdf', '.zip'];
 	const ext = path.extname(file.originalname).toLowerCase();
 	if(allowExt.indexOf(ext) > -1) {
 		cb(null, true);

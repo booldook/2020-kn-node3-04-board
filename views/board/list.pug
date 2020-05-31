@@ -16,7 +16,12 @@ block content
 				each list in lists
 					tr
 						td= list.id
-						td.board-link.text-left(data-id=`${list.id}`)= list.title
+						if list.src
+							td.board-link.text-left(data-id=`${list.id}`)
+								img.list-img(src=`${list.src}`)
+								span= list.title
+						else
+							td.board-link.text-left(data-id=`${list.id}`)= list.title
 						td= list.writer
 						td= list.created
 						td= list.readnum

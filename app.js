@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const createError = require('http-errors');
+const { alert } = require('./modules/util.js');
 require('dotenv').config();
 
 /* Server */
@@ -18,6 +19,7 @@ app.locals.pretty = true;
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/', express.static(path.join(__dirname, './public')));
+app.use('/storage', express.static(path.join(__dirname, './upload')));
 
 /* Router */
 const boardRouter = require('./routes/board');
@@ -31,6 +33,11 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
 	res.locals.message = err.message;
-	res.locals.status = (err.status || 500) + " error";
-	res.render('error.pug');
+	if(err.message == "File too large") {
+		res.send(alert("업로드 용량을 초과하였습니다.", "/board/list"));
+	}
+	else {
+		res.locals.status = (err.status || 500) + " error";
+		res.render('error.pug');
+	}
 })

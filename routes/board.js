@@ -3,7 +3,7 @@ const path = require('path');
 const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
-const { alert } = require('../modules/util');
+const { alert, imgExt } = require('../modules/util');
 const upload = require('../modules/multer-conn');
 const pager = require('../modules/pager');
 
@@ -24,6 +24,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		connect.release();
 		let lists = result[0].map((v) => {
 			v.created = moment(v.created).format('YYYY-MM-DD');
+			if(v.savename) {
+				if(imgExt.indexOf(path.extname(v.savename)) > -1) {
+					v.src = '/storage/' + v.savename.substr(0, 6) + '/' + v.savename; 
+				}
+			}
 			return v ;
 		});
 		pugVals.lists = lists;
