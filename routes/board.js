@@ -4,6 +4,7 @@ const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert } = require('../modules/util');
+const upload = require('../modules/multer-conn');
 const pager = require('../modules/pager');
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
@@ -56,10 +57,15 @@ router.get('/update/:id', async (req, res, next) => {
 	}
 });
 
-router.post('/save', async (req, res, next) => {
+router.post('/save', upload.single('upfile'), async (req, res, next) => {
 	let { title, writer, comment, created = moment().format('YYYY-MM-DD HH:mm:ss') } = req.body;
 	let values = [title, writer, comment, created];
 	let sql = "INSERT INTO board SET title=?, writer=?, comment=?, created=?";
+	if(req.file) {
+		sql += ", oriname=?, savename=?";
+		values.push(req.file.originalname);
+		values.push(req.file.filename);
+	}
 	let connect, result;
 	try {
 		connect = await pool.getConnection();
