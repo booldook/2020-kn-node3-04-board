@@ -1,0 +1,6 @@
+extends ../layout/default.pug
+block content
+	.container
+		form(action="/save" method="post" enctype="multipart/form-data")
+			input.form-control-file(type="file" name="upfile")
+			button 전송
