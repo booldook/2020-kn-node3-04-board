@@ -1,2 +1,5 @@
 .join-wrap .tit {width: 25%; padding: 16px; background-color: #333; color: #fff;}
 .join-wrap .desc {width: 75%; padding: 4px 8px;}
+
+.login-wrap {height: calc(100vh - 56px);}
+.login {width: 300px;}

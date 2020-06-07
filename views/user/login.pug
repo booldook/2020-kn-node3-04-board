@@ -1,2 +1,12 @@
 extends ../layout/default.pug
 block content
+	.login-wrap.d-flex.justify-content-center.align-items-center
+		.login.border.rounded.p-3
+			form(name="loginForm" method="post" action="/user/auth")
+				.p-2
+					input.form-control(type="text" name="userid" placeholder="아이디")
+				.p-2
+					input.form-control(type="password" name="userpw" placeholder="패스워드")
+				.p-2.text-center
+					button.btn.btn-primary 로그인
+					button.btn.btn-danger(type="button" onclick="location.href='/';") 회원가입
