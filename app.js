@@ -23,7 +23,12 @@ app.use('/storage', express.static(path.join(__dirname, './upload')));
 
 /* Router */
 const boardRouter = require('./routes/board');
+const userRouter = require('./routes/user');
 app.use('/board', boardRouter);
+app.use('/user', userRouter);
+app.use('/', (req, res, next) => {
+	res.redirect('/user/login');
+});
 
 
 /* 예외처리 */

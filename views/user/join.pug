@@ -1,0 +1,34 @@
+extends ../layout/default.pug
+block content
+	.jumbotron
+		h1.display-4 SignUp
+		p 본 사이트의 회원으로 등록하시면 다양한 혜택을 받으실 수 있습니다
+		hr.my-4
+		p 기존 회원이신 분은 아래의 링크에 따라 로그인 하시기 바랍니다
+		a.btn.btn-success(href="/") SignIn
+	.container 
+		.join-wrap.border.rounded.p-4
+			form(name="joinForm" method="post" action="/user/save" onSubmit="return joinSubmit(this);")
+				.d-flex.align-items-center.justify-content-between.border-bottom
+					.tit 사용자 아이디
+					.desc
+						input.form-control(type="text" name="userid" placeholder="아이디")
+				.d-flex.align-items-center.justify-content-between.border-bottom
+					.tit 패스워드
+					.desc
+						input.form-control(type="password" name="userpw" placeholder="패스워드")
+				.d-flex.align-items-center.justify-content-between.border-bottom
+					.tit 패스워드 확인
+					.desc
+						input.form-control(type="password" name="userpw2" placeholder="패스워드")
+				.d-flex.align-items-center.justify-content-between.border-bottom
+					.tit 닉네임(이름)
+					.desc
+						input.form-control(type="text" name="username" placeholder="닉네임")
+				.d-flex.align-items-center.justify-content-between.border-bottom
+					.tit 사용자 이메일
+					.desc
+						input.form-control(type="text" name="email" placeholder="이메일")
+				.text-center.p-3
+					button#bt-join.btn.btn-primary 가입
+					button.btn.btn-danger(type="reset") 다시작성
