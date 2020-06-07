@@ -1,6 +1,6 @@
 extends ../layout/default.pug
-script(src="https://unpkg.com/axios/dist/axios.min.js")
 block content
+	script(src="https://unpkg.com/axios/dist/axios.min.js")
 	.jumbotron
 		if list
 			h1 게시글 수정
@@ -31,7 +31,7 @@ block content
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 내용
 					.content.p-1
-						if list.savename
+						if list && list.savename
 							div.savefile
 								span= list.oriname
 								span.bt-delete.fa.fa-times(onclick=`rmFile(${list.id});`)

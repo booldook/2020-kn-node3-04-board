@@ -169,4 +169,26 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 });
 
+router.get('/rm-file/:id', async (req, res, next) => {
+	let id = req.params.id;
+	let sql, connect, result;
+	try {
+		sql = "SELECT savename FROM board WHERE id="+id;
+		connect = await pool.getConnection();
+		result = await connect.query(sql);
+		if(result[0][0].savename) {
+			await fsPromises.unlink(serverPath(result[0][0].savename))
+			sql = "UPDATE board SET savename='', oriname='' WHERE id="+id;
+			result = await connect.query(sql);
+			connect.release(); 
+			res.json({ code: 200 });
+		}
+		else res.json({ code: 521 });
+	}
+	catch(e) {
+		connect.release();
+		res.json({ code: 500 });
+	}
+});
+
 module.exports = router;
