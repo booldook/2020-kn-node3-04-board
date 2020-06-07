@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
 const multer = require('multer');
-const { allowExt } = require('./util');
+const { allowExt, imgExt } = require('./util');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, makeFolder());

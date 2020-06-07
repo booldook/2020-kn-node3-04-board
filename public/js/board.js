@@ -25,5 +25,13 @@ document.querySelectorAll(".board-link").forEach(function(v) {
 });
 
 function rmFile(id) {
-	
+	if(confirm('첨부파일을 삭제하시겠습니까?')) {
+		axios.get('/board/rm-file/'+id)
+		.then(function(res){
+			console.log(res);
+		})
+		.catch(function(err){
+			console.log(err);
+		}); 
+	}
 }
