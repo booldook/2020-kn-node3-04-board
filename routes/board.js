@@ -6,15 +6,10 @@ const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
 const { alert, imgExt } = require('../modules/util');
-const upload = require('../modules/multer-conn');
+const { upload, serverPath, clientPath, imgSrc } = require('../modules/multer-conn');
 const pager = require('../modules/pager');
 
-const imgSrc = (file) => {
-	if(imgExt.indexOf(path.extname(file).toLowerCase()) > -1) {
-		return '/storage/' + file.substr(0, 6) + '/' + file; 
-	}
-	else return null;
-}
+
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	let page = req.params.page ? Number(req.params.page) : 1;
@@ -52,13 +47,16 @@ router.get('/write', (req, res, next) => {
 
 router.get('/update/:id', async (req, res, next) => {
 	let pugVals = {cssFile: "board", jsFile: "board"};
-	let connect, sql, result;
+	let connect, sql, result, filePath;
 	sql = "SELECT * FROM board WHERE id="+req.params.id;
 	try {
 		connect = await pool.getConnection();
 		result = await connect.query(sql);
 		connect.release();
 		pugVals.list = result[0][0];
+		if(pugVals.list.savename) {
+			pugVals.list.savename = clientPath(pugVals.list.savename);
+		}
 		res.render("board/write.pug", pugVals);
 	}
 	catch (e) {
@@ -140,8 +138,7 @@ router.get('/remove/:id', async (req, res, next) => {
 		sql = "SELECT savename FROM board WHERE id=?";
 		result = await connect.query(sql, [id]);
 		if(result[0][0].savename) {
-			filePath = path.join(__dirname, '../upload' , result[0][0].savename.substr(0, 6), result[0][0].savename);
-			await fsPromises.unlink(filePath);
+			await fsPromises.unlink(serverPath(result[0][0].savename));
 		}
 		sql = "DELETE FROM board WHERE id=?";
 		result = await connect.query(sql, [id]);

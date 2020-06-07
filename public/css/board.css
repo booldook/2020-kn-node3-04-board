@@ -1,3 +1,5 @@
+.bt-delete {background-color: #222; color: #fff; padding: 2px 4px; border-radius: 2px; margin-left: 8px; cursor: pointer;}
+
 ul {list-style: none; margin: 0; padding: 0;}
 .wr-lists {padding: 16px; border: 1px solid #ccc; border-radius: 6px;}
 .wr-lists .title {flex: 0 0 20%; border-bottom: 1px solid #ccc;}

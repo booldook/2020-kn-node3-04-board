@@ -23,3 +23,7 @@ document.querySelectorAll(".board-link").forEach(function(v) {
 		location.href = "/board/view/" + this.dataset.id;
 	});
 });
+
+function rmFile(id) {
+	
+}

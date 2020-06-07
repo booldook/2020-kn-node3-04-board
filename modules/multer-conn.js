@@ -44,4 +44,19 @@ function fileFilter(req, file, cb) {
 	}
 }
 
-module.exports = upload;
+function serverPath(fPath) {
+	return filePath = path.join(__dirname, '../upload/', fPath.substr(0, 6), fPath);
+}
+
+function clientPath(fPath) {
+	return filePath = path.join('/storage/', fPath.substr(0, 6), fPath);
+}
+
+function imgSrc(file) {
+	if(imgExt.indexOf(path.extname(file).toLowerCase()) > -1) {
+		return '/storage/' + file.substr(0, 6) + '/' + file; 
+	}
+	else return null;
+}
+
+module.exports = { upload, serverPath, clientPath, imgSrc };

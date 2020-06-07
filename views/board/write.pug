@@ -1,4 +1,5 @@
 extends ../layout/default.pug
+script(src="https://unpkg.com/axios/dist/axios.min.js")
 block content
 	.jumbotron
 		if list
@@ -30,6 +31,10 @@ block content
 				li.wr-list.d-flex
 					.title.p-3.bg-dark.text-light 내용
 					.content.p-1
+						if list.savename
+							div.savefile
+								span= list.oriname
+								span.bt-delete.fa.fa-times(onclick=`rmFile(${list.id});`)
 						input.form-control-file(type="file" name="upfile" placeholder="첨부파일")
 						.file-comment.text-danger * jpg, gif, png, pdf, zip 파일만 업로드가 가능합니다.
 				li.text-center.p-3
