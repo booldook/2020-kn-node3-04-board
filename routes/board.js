@@ -91,16 +91,33 @@ router.post('/save', upload.single('upfile'), async (req, res, next) => {
 	}
 });
 
-router.post('/put', async (req, res, next) => {
+router.post('/put', upload.single('upfile'), async (req, res, next) => {
 	let { title, writer, comment, id } = req.body;
-	let values = [title, writer, comment, id];
-	let sql = "UPDATE board SET title=?, writer=?, comment=? WHERE id=?";
-	let connect, result;
+	let connect, result, sql, values;
 	try {
+		if(req.file) {
+			let sql2 = "SELECT savename FROM board WHERE id="+id;
+			connect = await pool.getConnection();
+			result = await connect.query(sql2);
+			if(result[0][0].savename) {
+				await fsPromises.unlink(serverPath(result[0][0].savename))
+			}
+			sql = "UPDATE board SET title=?, writer=?, comment=?, oriname=?, savename=? WHERE id=?";
+			values = [title, writer, comment, req.file.originalname, req.file.filename, id];
+		}
+		else {
+			sql = "UPDATE board SET title=?, writer=?, comment=? WHERE id=?";
+			values = [title, writer, comment, id];
+		}
 		connect = await pool.getConnection();
 		result = await connect.query(sql, values);
 		connect.release();
-		if(result[0].affectedRows > 0) res.send(alert('수정되었습니다', '/board/list/'+req.app.locals.page));
+		if(result[0].affectedRows > 0) {
+			if(req.app.locals.page)
+				res.send(alert('수정되었습니다', '/board/list/'+req.app.locals.page));
+			else
+				res.send(alert('수정되었습니다', '/board/list/'));
+		}
 		else res.send(alert('에러가 발생하였습니다.', '/board'));
 	}
 	catch(e) {
