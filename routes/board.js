@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const router = express.Router();
 const moment = require('moment');
 const { pool } = require('../modules/mysql-conn');
@@ -133,10 +134,16 @@ router.get('/view/:id', async (req, res, next) => {
 
 router.get('/remove/:id', async (req, res, next) => {
 	let id = req.params.id;
-	let sql = "DELETE FROM board WHERE id=?";
-	let connect, result;
+	let sql, connect, result, filePath;
 	try {
 		connect = await pool.getConnection();
+		sql = "SELECT savename FROM board WHERE id=?";
+		result = await connect.query(sql, [id]);
+		if(result[0][0].savename) {
+			filePath = path.join(__dirname, '../upload' , result[0][0].savename.substr(0, 6), result[0][0].savename);
+			await fsPromises.unlink(filePath);
+		}
+		sql = "DELETE FROM board WHERE id=?";
 		result = await connect.query(sql, [id]);
 		connect.release();
 		if(result[0].affectedRows == 1) res.send(alert("삭제되었습니다.", "/board/list/"+req.app.locals.page));
