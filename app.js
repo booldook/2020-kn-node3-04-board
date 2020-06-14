@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const createError = require('http-errors');
+const session = require('express-session');
 const { alert } = require('./modules/util.js');
 require('dotenv').config();
 
@@ -20,6 +21,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/', express.static(path.join(__dirname, './public')));
 app.use('/storage', express.static(path.join(__dirname, './upload')));
+
+/* Session */
+app.use(session({
+	secret: process.env.PASS_SALT,
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		httpOnly: true,
+		secure: process.env.SERVICE === 'production' ? true : false
+	}
+}));
+
 
 /* Router */
 const boardRouter = require('./routes/board');

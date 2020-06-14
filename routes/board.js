@@ -12,6 +12,7 @@ const pager = require('../modules/pager');
 
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
+	console.log(req.session);
 	let page = req.params.page ? Number(req.params.page) : 1;
 	req.app.locals.page = page;
 	let pugVals = {cssFile: "board", jsFile: "board"};
