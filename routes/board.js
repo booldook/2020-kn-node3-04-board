@@ -41,7 +41,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	}
 })
 
-router.get('/write', isUser, isGrant2, (req, res, next) => {
+router.get('/write', isUser, (req, res, next) => {
 	const pugVals = {cssFile: "board", jsFile: "board"};
 	pugVals.user = req.session.user;
 	res.render("board/write.pug", pugVals);

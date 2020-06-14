@@ -8,8 +8,6 @@ const session = require('express-session');
 const mySQLSession = require('express-mysql-session')(session);
 const { pool } = require('./modules/mysql-conn');
 const { alert } = require('./modules/util.js');
-const passport = require('passport');
-const passportModule = require('./passport');
 
 
 /* Server */
@@ -41,10 +39,6 @@ app.use(session({
 	},
 	store: sessionStore
 }));
-
-passportModule(passport);
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 /* Router */
