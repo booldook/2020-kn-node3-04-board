@@ -1,25 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const { isGuest, isUser } = require('../modules/auth-conn');
 const { alert } = require('../modules/util'); 
 const { pool } = require('../modules/mysql-conn');
 const pugVals = {cssFile: "user", jsFile: "user"};
 
-router.get('/login', (req, res, next) => {
+router.get('/login', isGuest, (req, res, next) => {
 	res.render('user/login.pug', pugVals);
 });
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout', isUser, (req, res, next) => {
 	req.session.destroy();
 	req.app.locals.user = null;
 	res.send(alert("로그아웃 되었습니다.", "/"));
 });
 
-router.get('/join', (req, res, next) => {
+router.get('/join', isGuest,(req, res, next) => {
 	res.render('user/join.pug', pugVals);
 });
 
-router.post('/save', async (req, res, next) => {
+router.post('/save', isGuest, async (req, res, next) => {
 	let {userid, userpw, username, email} = req.body;
 	userpw = await bcrypt.hash(userpw + process.env.PASS_SALT, Number(process.env.PASS_ROUND));
 	let connect, sql, result, sqlVals; 
@@ -38,7 +39,7 @@ router.post('/save', async (req, res, next) => {
 	}
 });
 
-router.post('/auth', async (req, res, next) => {
+router.post('/auth', isGuest, async (req, res, next) => {
 	let {userid, userpw} = req.body;
 	let sql, connect, result;
 	try {

@@ -8,11 +8,10 @@ const { pool } = require('../modules/mysql-conn');
 const { alert, imgExt } = require('../modules/util');
 const { upload, serverPath, clientPath, imgSrc } = require('../modules/multer-conn');
 const pager = require('../modules/pager');
-
+const { isUser, isGuest, isGrant2 } = require('../modules/auth-conn');
 
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
-	console.log(req.session);
 	let page = req.params.page ? Number(req.params.page) : 1;
 	req.app.locals.page = page;
 	let pugVals = {cssFile: "board", jsFile: "board"};
@@ -42,13 +41,13 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	}
 })
 
-router.get('/write', (req, res, next) => {
+router.get('/write', isUser, isGrant2, (req, res, next) => {
 	const pugVals = {cssFile: "board", jsFile: "board"};
 	pugVals.user = req.session.user;
 	res.render("board/write.pug", pugVals);
 });
 
-router.get('/update/:id', async (req, res, next) => {
+router.get('/update/:id', isUser, async (req, res, next) => {
 	let pugVals = {cssFile: "board", jsFile: "board"};
 	let connect, sql, result, filePath;
 	sql = "SELECT * FROM board WHERE id="+req.params.id;
@@ -69,7 +68,7 @@ router.get('/update/:id', async (req, res, next) => {
 	}
 });
 
-router.post('/save', upload.single('upfile'), async (req, res, next) => {
+router.post('/save', isUser, upload.single('upfile'), async (req, res, next) => {
 	let { title, writer, comment, created = moment().format('YYYY-MM-DD HH:mm:ss') } = req.body;
 	let values = [title, writer, comment, created];
 	let sql = "INSERT INTO board SET title=?, writer=?, comment=?, created=?";
@@ -95,7 +94,7 @@ router.post('/save', upload.single('upfile'), async (req, res, next) => {
 	}
 });
 
-router.post('/put', upload.single('upfile'), async (req, res, next) => {
+router.post('/put', isUser, upload.single('upfile'), async (req, res, next) => {
 	let { title, writer, comment, id } = req.body;
 	let connect, result, sql, values;
 	try {
@@ -130,7 +129,7 @@ router.post('/put', upload.single('upfile'), async (req, res, next) => {
 	}
 });
 
-router.get('/view/:id', async (req, res, next) => {
+router.get('/view/:id', isUser, async (req, res, next) => {
 	let id = req.params.id;
 	let pugVals = {cssFile: "board", jsFile: "board"};
 	let sql = "SELECT * FROM board WHERE id=?";
@@ -152,7 +151,7 @@ router.get('/view/:id', async (req, res, next) => {
 	}
 })
 
-router.get('/remove/:id', async (req, res, next) => {
+router.get('/remove/:id', isUser, async (req, res, next) => {
 	let id = req.params.id;
 	let sql, connect, result, filePath;
 	try {
@@ -174,7 +173,7 @@ router.get('/remove/:id', async (req, res, next) => {
 	}
 });
 
-router.get('/download/:id', async (req, res, next) => {
+router.get('/download/:id', isUser, async (req, res, next) => {
 	const id = req.params.id;
 	const sql = "SELECT * FROM board WHERE id=" + id;
 	let connect, result;
@@ -191,7 +190,7 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 });
 
-router.get('/rm-file/:id', async (req, res, next) => {
+router.get('/rm-file/:id', isUser, async (req, res, next) => {
 	let id = req.params.id;
 	let sql, connect, result;
 	try {

@@ -1,11 +1,14 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
+
 const path = require('path');
 const createError = require('http-errors');
 const session = require('express-session');
 const mySQLSession = require('express-mysql-session')(session);
+const { pool } = require('./modules/mysql-conn');
 const { alert } = require('./modules/util.js');
-require('dotenv').config();
+
 
 /* Server */
 app.listen(process.env.PORT, () => {
@@ -24,7 +27,9 @@ app.use('/', express.static(path.join(__dirname, './public')));
 app.use('/storage', express.static(path.join(__dirname, './upload')));
 
 /* Session */
+const sessionStore = new mySQLSession({}, pool);
 app.use(session({
+	key: 'node-board',
 	secret: process.env.PASS_SALT,
 	resave: false,
 	saveUninitialized: false,
@@ -32,13 +37,7 @@ app.use(session({
 		httpOnly: true,
 		secure: process.env.SERVICE === 'production' ? true : false
 	},
-	store: new mySQLSession({
-		host: process.env.DB_HOST,
-		port: process.env.DB_PORT,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASS,
-		database: process.env.DB_DATABASE
-	})
+	store: sessionStore
 }));
 
 
