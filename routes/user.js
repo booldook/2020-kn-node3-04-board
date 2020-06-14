@@ -10,7 +10,9 @@ router.get('/login', (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-
+	req.session.destroy();
+	req.app.locals.user = null;
+	res.send(alert("로그아웃 되었습니다.", "/"));
 });
 
 router.get('/join', (req, res, next) => {
@@ -54,7 +56,6 @@ router.post('/auth', async (req, res, next) => {
 					req.session.user.username = result[0][0].username;
 					req.session.user.email = result[0][0].email;
 					req.session.user.grant = result[0][0].grant;
-					req.app.locals.user = req.session.user;
 					res.send(alert("회원입니다. 반갑습니다.", '/board'));
 				}
 				else res.send(alert('아이디와 패스워드를 확인하세요.', '/'));

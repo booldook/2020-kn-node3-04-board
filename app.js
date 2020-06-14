@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const createError = require('http-errors');
 const session = require('express-session');
+const mySQLSession = require('express-mysql-session')(session);
 const { alert } = require('./modules/util.js');
 require('dotenv').config();
 
@@ -30,7 +31,14 @@ app.use(session({
 	cookie: {
 		httpOnly: true,
 		secure: process.env.SERVICE === 'production' ? true : false
-	}
+	},
+	store: new mySQLSession({
+		host: process.env.DB_HOST,
+		port: process.env.DB_PORT,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASS,
+		database: process.env.DB_DATABASE
+	})
 }));
 
 

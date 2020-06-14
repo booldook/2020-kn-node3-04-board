@@ -33,6 +33,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 			return v ;
 		});
 		pugVals.lists = lists;
+		pugVals.user = req.session.user;
 		res.render("board/list.pug", pugVals);
 	}
 	catch (e) {
@@ -43,6 +44,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 
 router.get('/write', (req, res, next) => {
 	const pugVals = {cssFile: "board", jsFile: "board"};
+	pugVals.user = req.session.user;
 	res.render("board/write.pug", pugVals);
 });
 
@@ -58,6 +60,7 @@ router.get('/update/:id', async (req, res, next) => {
 		if(pugVals.list.savename) {
 			pugVals.list.savename = clientPath(pugVals.list.savename);
 		}
+		pugVals.user = req.session.user;
 		res.render("board/write.pug", pugVals);
 	}
 	catch (e) {
@@ -140,6 +143,7 @@ router.get('/view/:id', async (req, res, next) => {
 		pugVals.data.created = moment(pugVals.data.created).format('YYYY-MM-DD HH:mm:ss');
 		if(pugVals.data.savename) pugVals.data.src = imgSrc(pugVals.data.savename);
 		if(pugVals.data.savename) pugVals.data.file = pugVals.data.oriname; 
+		pugVals.user = req.session.user;
 		res.render('board/view.pug', pugVals);
 	}
 	catch (e) {
