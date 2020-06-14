@@ -5,7 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const createError = require('http-errors');
 const session = require('express-session');
-const mySQLSession = require('express-mysql-session')(session);
+const cookieParser = require('cookie-parser');
 const { pool } = require('./modules/mysql-conn');
 const { alert } = require('./modules/util.js');
 const passport = require('passport');
@@ -29,7 +29,7 @@ app.use('/', express.static(path.join(__dirname, './public')));
 app.use('/storage', express.static(path.join(__dirname, './upload')));
 
 /* Session */
-const sessionStore = new mySQLSession({}, pool);
+app.use(cookieParser(process.env.PASS_SALT));
 app.use(session({
 	key: 'node-board',
 	secret: process.env.PASS_SALT,
@@ -38,8 +38,7 @@ app.use(session({
 	cookie: {
 		httpOnly: true,
 		secure: process.env.SERVICE === 'production' ? true : false
-	},
-	store: sessionStore
+	}
 }));
 
 passportModule(passport);

@@ -6,7 +6,7 @@ const cb = () => {
 
 module.exports = (passport) => {
 	passport.use(new KakaoStratege({
-		clientID : procee.env.KAKAO_KEY,
+		clientID : process.env.KAKAO_KEY,
     callbackURL : '/'
-	}), cb);
+	}, cb));
 }
