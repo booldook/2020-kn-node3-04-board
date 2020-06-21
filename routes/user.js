@@ -45,9 +45,10 @@ router.post('/auth', async (req, res, next) => {
 		console.log(user);
 		if(err) return next(err);
 		if(!user) return res.send(alert(msg, "/"));
-		else return res.send(alert("로그인 되었습니다.", "/"));
+		else return res.send(alert("로그인 되었습니다.~~~~~", "/"));
 	}
 	passport.authenticate('local', done)(req, res, next);
+	
 });
 
 module.exports = router;
