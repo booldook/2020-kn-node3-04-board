@@ -12,7 +12,8 @@ router.get('/login', isGuest, (req, res, next) => {
 });
 
 router.get('/logout', isUser, (req, res, next) => {
-	req.session.destroy();
+	// req.session.destroy();
+	req.logout();
 	req.app.locals.user = null;
 	res.send(alert("로그아웃 되었습니다.", "/"));
 });
