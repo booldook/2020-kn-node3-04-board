@@ -56,8 +56,12 @@ router.post('/auth', async (req, res, next) => {
 });
 
 router.get("/kakao", passport.authenticate('kakao'));
-router.get("/kakao/cb", passport.authenticate('kakao', {failureRedirect: "/"}), (req, res) => {
-	res.redirect("/");
+router.get("/kakao/cb", passport.authenticate('kakao', {failureRedirect: "/"}), (req, res, next) => {
+	console.log(req.user);
+	req.login(req.user, (err) => {
+		if(err) next(err);
+		else res.redirect("/board");
+	});
 });
 
 module.exports = router;
