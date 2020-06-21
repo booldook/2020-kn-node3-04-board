@@ -42,10 +42,14 @@ router.post('/save', isGuest, async (req, res, next) => {
 
 router.post('/auth', async (req, res, next) => {
 	const done = (err, user, msg) => {
-		console.log(user);
 		if(err) return next(err);
 		if(!user) return res.send(alert(msg, "/"));
-		else return res.send(alert("로그인 되었습니다.~~~~~", "/"));
+		else {
+			req.login(user, (err) => {
+				if(err) return next(err);
+				else return res.send(alert("로그인 되었습니다.", "/board"));
+			});
+		}
 	}
 	passport.authenticate('local', done)(req, res, next);
 	
